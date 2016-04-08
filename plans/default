@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# Created by Tommy,2015-11-15
+#
+
+# general.sh
+NAME=""
+RAM=""
+ARCH=""
+VCPU=""
+CPU_MODEL="host-model"
+
+# installation.sh
+OS_VARIANT="auto"
+INST_TYPE=""
+CDROM=""
+LOCATION=""
+
+# storage.sh
+TEMPLATE=""
+DISK_SIZE=""
+DISK_FORMAT=""
+
+# network.sh
+NETWORK_TYPE=""
+NETWORK_INTERFACE=""
+NETWORK_MAC=""
+
+# graphics.sh
+GRAPHICS_TYPE=""
+LISTEN="0.0.0.0"
+PORT=""
+TLSPORT=""
+PASSWORD=""
