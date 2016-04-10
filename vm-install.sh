@@ -12,6 +12,7 @@ function initSystem() {
         IMAG_PATH=/vm/images
         ISO_PATH=/vm/manager/iso
         TEMPLATE_PATH=/vm/manager/templates
+	VG_NAME=vg_block
 
 	LOG=/dev/null
 
@@ -195,33 +196,54 @@ function setInstallation() {
 # storage
 function setDisk() {
 	if [ "$DISK_SIZE" == "" ] ; then
-		echo "* Add disk"$DISKID"..."
-		echo -n "* Set disk size (GB): "
-		read DISK_SIZE
-	fi	
+                echo "* Add disk"$DISKID"..."
+                echo -n "* Set disk size (GB): "
+                read DISK_SIZE
+        fi
 
 	if [ "$DISK_FORMAT" == "" ] ; then
-		echo -n "* Set disk format (raw,qcow2): "
-		read DISK_FORMAT
-	fi
+                echo -n "* Set disk format (raw,qcow2,lvm): "
+                read DISK_FORMAT
+        fi
 
-	if [ -e $IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT ] ; then
-		echo
-		echo "* "$IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT" is already exists."
-		echo "* $NAME install was ABORTED"
-		echo
-		exit 5
-	fi
-
-	$IMAG_COMMAND create -f $DISK_FORMAT $IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT $DISK_SIZE"G"
-	if [ "$?" != "0" ] ; then
-		echo
-		echo "* Can't create disk "$IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT
-		echo "* $NAME install was ABORTED"
-		echo
-		exit 8
-	fi
-	DISKS=$DISKS" --disk "$IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT",bus=virtio,format="$DISK_FORMAT
+	case $DISK_FORMAT in
+		"RAW" | "raw" | "QCOW2" | "qcow2" )
+			if [ -e $IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT ] ; then
+        		        echo
+                		echo "* "$IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT" is already exists."
+               			echo "* $NAME install was ABORTED"
+                		echo
+                		exit 5
+       			fi
+			IMAG_COMMAND create -f $DISK_FORMAT $IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT $DISK_SIZE"G"
+        		if [ "$?" != "0" ] ; then
+                		echo
+                		echo "* Can't create disk "$IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT
+                		echo "* $NAME install was ABORTED"
+                		echo
+                		exit 8
+        		fi
+        		DISKS=$DISKS" --disk "$IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT",bus=virtio,format="$DISK_FORMAT
+			;;
+		"LVM" | "lvm" )
+			if [ -e "/dev/"$VG_NAME/$NAME"_disk"$DISKID ] ; then
+                                echo
+                                echo "* "/dev/$VG_NAME/$NAME"_disk"$DISKID" is already exists."
+                                echo "* $NAME install was ABORTED"
+                                echo
+                                exit 5
+                        fi
+                        lvcreate -L $DISK_SIZE"G" -n $NAME"_disk"$DISKID $VG_NAME
+                        if [ "$?" != "0" ] ; then
+                                echo
+                                echo "* Can't create disk "$VG_NAME/$NAME"_disk"$DISKID
+                                echo "* $NAME install was ABORTED"
+                                echo
+                                exit 8
+                        fi
+                        DISKS=$DISKS" --disk /dev/"$VG_NAME/$NAME"_disk"$DISKID",bus=virtio"
+                        ;; 
+	esac
 }
 
 function depDisk() {
