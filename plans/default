@@ -11,7 +11,7 @@ VCPU=""
 CPU_MODEL="host-model"
 
 # installation.sh
-OS_VARIANT="auto"
+OS_VARIANT=""
 INST_TYPE=""
 CDROM=""
 LOCATION=""

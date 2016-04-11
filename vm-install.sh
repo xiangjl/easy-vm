@@ -5,6 +5,10 @@
 
 # Init System
 function initSystem() {
+
+	# OS environment
+	OS="EL7"
+
         # Setup environment
         VIRT_COMMAND=/usr/bin/virsh
         INST_COMMAND=/usr/bin/virt-install
@@ -12,7 +16,7 @@ function initSystem() {
         IMAG_PATH=/vm/images
         ISO_PATH=/vm/manager/iso
         TEMPLATE_PATH=/vm/manager/templates
-	VG_NAME=vg_block
+	VG_NAME=local_storage
 
 	LOG=/dev/null
 
@@ -160,7 +164,11 @@ function setGeneral() {
 function setInstallation() {
 	if [ "$OS_VARIANT" == "" ] ; then
 		echo "* OS-variant list:"
-		osinfo-query os
+		if [ "$OS" == "EL7" ] ; then 
+			/usr/bin/osinfo-query os
+		else
+			$INST_COMMAND --os-variant list
+		fi
 		echo -n "* Please enter the OS-variant: "
 		read OS_VARIANT
 	fi
@@ -392,7 +400,7 @@ function setDevice() {
 		DEVICE="--video qxl "
 		;;
 	esac
-	DEVICE="--channel unix,mode=bind,target_type=virtio,name=org.qemu.guest_agent.0 --memballoon virtio"
+	DEVICE=$DEVICE"--channel unix,mode=bind,target_type=virtio,name=org.qemu.guest_agent.0"
 }
 
 function waitConfirm() {
