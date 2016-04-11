@@ -6,9 +6,6 @@
 # Init System
 function initSystem() {
 
-	# OS environment
-	OS="EL7"
-
         # Setup environment
         VIRT_COMMAND=/usr/bin/virsh
         INST_COMMAND=/usr/bin/virt-install
@@ -164,7 +161,8 @@ function setGeneral() {
 function setInstallation() {
 	if [ "$OS_VARIANT" == "" ] ; then
 		echo "* OS-variant list:"
-		if [ "$OS" == "EL7" ] ; then 
+		which osinfo-query &> /dev/null
+		if [ "$?" == "0" ] ; then 
 			/usr/bin/osinfo-query os
 		else
 			$INST_COMMAND --os-variant list
