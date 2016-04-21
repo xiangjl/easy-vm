@@ -7,9 +7,9 @@
 function initSystem() {
 
         # Setup environment
-        VIRT_COMMAND=/usr/bin/virsh
-        INST_COMMAND=/usr/bin/virt-install
-        IMAG_COMMAND=/usr/bin/qemu-img
+        VIRT_COMMAND=`which virsh`
+        INST_COMMAND=`which virt-install`
+        IMAG_COMMAND=`which qemu-img`
         IMAG_PATH=/vm/images
         ISO_PATH=/vm/manager/iso
         TEMPLATE_PATH=/vm/manager/templates
@@ -221,7 +221,7 @@ function setDisk() {
                 		echo
                 		exit 5
        			fi
-			IMAG_COMMAND create -f $DISK_FORMAT $IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT $DISK_SIZE"G"
+			$IMAG_COMMAND create -f $DISK_FORMAT $IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT $DISK_SIZE"G"
         		if [ "$?" != "0" ] ; then
                 		echo
                 		echo "* Can't create disk "$IMAG_PATH/$NAME"_disk"$DISKID"."$DISK_FORMAT
