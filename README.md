@@ -3,23 +3,23 @@
 可以使用以下方法使用该脚本：
 
 ```
-yum install -y qemu-kvm qemu-img
+sudo yum install -y qemu-kvm qemu-img
 
-yum install -y libvirt virt-install
+sudo yum install -y libvirt virt-install
 
-yum install -y git
+sudo yum install -y git
 
-mkdir -p /vm/images /vm/manager/iso /vm/manager/templates
+sudo mkdir -p /vm/images /vm/manager/iso /vm/manager/templates
 
 cd /usr/share
 
-git clone https://github.com/xiangjl/easy-vm.git
+sudo git clone https://github.com/xiangjl/easy-vm.git
 
 ln -s /usr/share/easy-vm /vm/manager/shell
 
 cd /vm/manager/shell
 
-./vm-install.sh
+sudo ./vm-install.sh
 ```
 
 如果您不希望每次输入所有可选的虚拟机配置，您可以尝试修改配置文件：
@@ -41,5 +41,5 @@ vi new-plan
 
 cd ..
 
-./vm-install.sh new-plan
+sudo ./vm-install.sh new-plan
 ```
