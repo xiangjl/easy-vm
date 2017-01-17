@@ -13,6 +13,7 @@ function initSystem() {
         IMAG_PATH=/vm/images
         ISO_PATH=/vm/manager/iso
         TEMPLATE_PATH=/vm/manager/templates
+	PLANS_PATH=/vm/manager/esay-vm/plans
 	VG_NAME=local_storage
 
 	LOG=/dev/null
@@ -80,11 +81,11 @@ function checkSystem() {
 
 function setPlan() {
 	if [ "$1" == "" ] ; then
-			USE_PLAN=default
+			USE_PLAN="default"
 	else
 			USE_PLAN=$1
 	fi
-	source ./plans/$USE_PLAN
+	source $PLANS_PATH"/"$USE_PLAN
 }
 # general
 function setGeneral() {
@@ -423,16 +424,6 @@ function waitConfirm() {
 		echo "* Install Media: $LOCATION"
 	fi
 
-	# storage.sh
-	if [ "$TEMPLATE" != "" ] ; then
-		echo "* Use Template: $TEMPLATE"
-	fi
-	if [ "$DISK_SIZE" != "" ] ; then
-		echo "* Disk Size $DISK_SIZE"
-	fi
-	if [ "$DISK_FORMAT" != "" ] ; then
-		echo "* Disk Format: $DISK_FORMAT"
-	fi
 	# network.sh
 	echo "* Network Type: $NETWORK_TYPE"
 	echo "* Network Interface: $NETWORK_INTERFACE"
@@ -450,6 +441,18 @@ function waitConfirm() {
 	if [ "$PASSWORD" != "" ] ; then
 		echo "* Graphics Password: $PASSWORD"
 	fi
+
+	# install parameter
+	echo "* Install Command::"
+	echo "  "$INST_COMMAND" \\"
+	echo "    "$GENERAL" \\"
+        echo "    "$INSTALLATION" \\"
+        echo "    "$STORAGE" \\"
+        echo "    "$NETWORK" \\"
+        echo "    "$GRAPHICS" \\"
+        echo "    "$VIRTUALIZATION" \\"
+        echo "    "$DEVICE
+	
 	echo "---------------------------------"
 	echo -n "confirm? (yes/no):"
 	read CONFIRM
