@@ -13,7 +13,7 @@ function initSystem() {
         IMAG_PATH=/vm/images
         ISO_PATH=/vm/manager/iso
         TEMPLATE_PATH=/vm/manager/templates
-	PLANS_PATH=/vm/manager/esay-vm/plans
+	PLANS_PATH=/usr/local/share/easy-vm/plans
 	VG_NAME=local_storage
 
 	LOG=/dev/null

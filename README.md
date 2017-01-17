@@ -11,13 +11,13 @@ sudo yum install -y git
 
 sudo mkdir -p /vm/images /vm/manager/iso /vm/manager/templates
 
-cd /usr/share
+cd /usr/local/share
 
 sudo git clone https://github.com/xiangjl/easy-vm.git
 
-ln -s /usr/share/easy-vm /vm/manager/shell
+ln -s /usr/local/share/easy-vm /vm/manager/easy-vm
 
-cd /vm/manager/shell
+cd /vm/manager/easy-vm
 
 sudo ./vm-install.sh
 ```
