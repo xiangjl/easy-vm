@@ -87,6 +87,7 @@ function setPlan() {
 	fi
 	source $PLANS_PATH"/"$USE_PLAN
 }
+
 # general
 function setGeneral() {
 	if [ "$NAME" == "" ] ; then
@@ -465,41 +466,46 @@ function waitConfirm() {
         esac
 }
 
-echo
+function main(){
 
-initSystem
-checkSystem
-setPlan $1
-setGeneral
-setInstallation
-setStorage
-setNetwork
-setGraphics
-setVirtualization
-setDevice
-waitConfirm
+	echo
 
-echo
-echo "* Preparing to install $NAME virtual machine"
+	initSystem
+	checkSystem
+	setPlan $1
+	setGeneral
+	setInstallation
+	setStorage
+	setNetwork
+	setGraphics
+	setVirtualization
+	setDevice
+	waitConfirm
 
-# Ok, lets give it a shot...
-# If this completes successfully
-$INST_COMMAND \
-        $GENERAL \
-        $INSTALLATION \
-        $STORAGE \
-        $NETWORK \
-        $GRAPHICS \
-        $VIRTUALIZATION \
-        $DEVICE \
-        --noautoconsole
-sleep 5
-$VIRT_COMMAND setmem $NAME $[$RAM/4*3]M --config
+	echo
+	echo "* Preparing to install $NAME virtual machine"
 
-echo
-echo "* The $NAME virtual machine is installing"
-echo
-echo "* To access and monitor $NAME, select"
-echo "  Applications -> System Tools -> Virtual Machine Manager"
+	# Ok, lets give it a shot...
+	# If this completes successfully
+	$INST_COMMAND \
+        	$GENERAL \
+        	$INSTALLATION \
+        	$STORAGE \
+        	$NETWORK \
+        	$GRAPHICS \
+        	$VIRTUALIZATION \
+        	$DEVICE \
+        	--noautoconsole
+	sleep 5
+	$VIRT_COMMAND setmem $NAME $[$RAM/4*3]M --config
 
-exit 0
+	echo
+	echo "* The $NAME virtual machine is installing"
+	echo
+	echo "* To access and monitor $NAME, select"
+	echo "  Applications -> System Tools -> Virtual Machine Manager"
+
+	exit 0
+}
+
+main $1
