@@ -312,6 +312,9 @@ function setNetwork() {
 		echo -n "* Enter MAC address (example:52:54:0A:07:01:01): "
 		read NETWORK_MAC
 	fi
+	if [ "$NETWORK_MAC" == "auto" ] ; then
+		NETWORK_MAC=""
+	fi
 	if [ "$NETWORK_MAC" == "ip" ] ; then
 		echo -n "* Enter IP address (example:192.168.1.1): "
 		read NETWORK_IP
